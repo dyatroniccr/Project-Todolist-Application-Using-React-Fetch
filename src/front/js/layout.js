@@ -7,6 +7,7 @@ import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 
+import App from "./component/app.jsx";
 import TaskList from "./component/taskList.jsx";
 
 import { Navbar } from "./component/navbar";
@@ -21,7 +22,8 @@ const Layout = () => {
     return (
         <div>
             <BrowserRouter basename={basename}>
-                <ScrollToTop>                
+                <ScrollToTop>  
+                    <App />              
                     <Routes>
                         <Route element={<Home />} path="/" />
                         <Route element={<Demo />} path="/demo" />
@@ -29,7 +31,7 @@ const Layout = () => {
                         <Route element={<Single />} path="/single/:thetitle" />
                         <Route element={<h1>Not found! 404</h1>} path="*" />
                     </Routes>
-                    <Footer />
+                    
                 </ScrollToTop>
             </BrowserRouter>
         </div>
