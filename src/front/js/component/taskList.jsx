@@ -2,13 +2,33 @@ import React, { useState, useEffect, useRef } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 
 //Components 
-
+import { Context } from "../store/appContext";
 //Styles
 import "../../styles/todolist.css"
 
 const TaskList = () => {
     const inputName = useRef(null);    
-    
+    const { store, actions } = useContext(Context);
+    const [refresh, setRefresh] = useState(false) //estado del compoenente para controlar su reenderizado
+
+    useEffect(() => {
+        //ejecutamos una función asíncrona que traerá la información de la lista de To Do
+        const cargaDatos = async () => {
+            actions.getToDoList()
+        }
+        cargaDatos()
+
+        let limpiar = document.querySelector("#tarea")
+        limpiar.value = ""
+    }, [store.user, refresh]) //El componente se renderizará la primera vez y cada vez que el estado user o refresh cambien
+
+    useEffect(() => { console.log(store.todoList) }, [store.todoList])
+    useEffect(() => {
+        const cargaDatos = async () => {
+            actions.getToDoList()
+        }
+        cargaDatos()
+    }, [refresh])
     //Declaracion de Variables
     const [tasks, setTasks] = useState([
 		{ id:1, tarea: "Practicar React", done: false},
