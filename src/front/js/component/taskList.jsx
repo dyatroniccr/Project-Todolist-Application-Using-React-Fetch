@@ -25,7 +25,9 @@ const TaskList = () => {
   useEffect(() => {
     console.log(store.todoList);
   }, [store.todoList]);
-  useEffect(() => {//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  
+  useEffect(() => {
+    //
     const cargaDatos = async () => {
       actions.getToDoList();
     };
@@ -68,26 +70,33 @@ const TaskList = () => {
             onKeyDown={(e) => {
               if (e.keyCode == "13") {
                 console.log("Presionaste el Enter: ", e.target.value);
-                addNewTask(e.target.value);
+                //addNewTask(e.target.value);
+                let resultado = actions.agregarToDo(e.target.value);
+                if (resultado) {
+                  setRefresh(!refresh);
+                  e.target.value = ""; //restauro el valor a vacío
+                }
               }
             }}
           />
         </div>
-        {tasks && tasks.length > 0 ? (
+
+        {store.todoList && store.todoList.length > 0 ? (
           <>
-            {tasks.map((item, index) => (
+            {store.todoList.map((item, index) => (
               <>
                 <div
                   key={item.id}
                   className="tarea border fs-3 ms-2 me-3 ps-5 pb-3 pt-3 d-flex justify-content-between"
                 >
-                  {item.tarea}
+                  {item.label}
                   <button
                     type="button"
                     className="ocultar border border-0 me-2 "
                     style={{ width: 40, height: 40 }}
                     onClick={() => {
-                      removeTask(index);
+                      //removeTask(index);
+                      actions.eliminarToDo(index);
                     }}
                   >
                     <FaTrashAlt />

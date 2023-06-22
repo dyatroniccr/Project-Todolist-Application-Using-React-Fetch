@@ -49,6 +49,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       ...todoActions(getStore, getActions, setStore),
       useFetch: async (endpoint, body, method = "GET") => {
         let url = process.env.BACKEND_URL + endpoint;
+        console.log(url);
         let response = await fetch(url, {
           method: method,
           headers: { "Content-Type": "application/json" },
@@ -56,12 +57,14 @@ const getState = ({ getStore, getActions, setStore }) => {
         });
 
         let respuestaJson = await response.json();
-
+        
         return { respuestaJson, response };
       },
       getFetch: async (endpoint) => {
         let url = process.env.BACKEND_URL + endpoint;
+        console.log(url);
         let response = await fetch(url);
+        console.log("hola"+response);
 
         let respuestaJson = await response.json();
         console.log(respuestaJson);
