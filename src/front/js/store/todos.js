@@ -16,7 +16,7 @@ export function todoActions(getStore, getActions, setStore) {
       //De igual manera como necesito usar el estado todoList y el estado user, debo traerme el store
       let store = getStore();
 
-      let { respuestaJson, response } = await actions.getFetch(
+      let { respuestaJson, response } = await actions.useFetch(
         `/todos/user/${store.user}`
       );
       if (response.ok) {

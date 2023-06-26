@@ -22,23 +22,7 @@ const TaskList = () => {
     //limpiar.value = "";
   }, [store.user, refresh]); //El componente se renderizará la primera vez y cada vez que el estado user o refresh cambien
 
-  useEffect(() => {
-    console.log(store.todoList);
-  }, [store.todoList]);
-  
-  useEffect(() => {
-    //
-    const cargaDatos = async () => {
-      actions.getToDoList();
-    };
-    cargaDatos();
-  }, [refresh]);
-
-  //Declaracion de Variables
-  const [tasks, setTasks] = useState([
-    { id: 1, tarea: "Practicar React", done: false },
-    { id: 2, tarea: "Ir al cine", done: false },
-  ]);
+  useEffect(() => {}, [store.todoList]);
 
   useEffect(() => {
     inputName.current.focus();
@@ -67,11 +51,11 @@ const TaskList = () => {
             name="name"
             className="fs-4"
             placeholder="What needs to be done?"
-            onKeyDown={(e) => {
+            onKeyDown={async (e) => {
               if (e.keyCode == "13") {
                 console.log("Presionaste el Enter: ", e.target.value);
                 //addNewTask(e.target.value);
-                let resultado = actions.agregarToDo(e.target.value);
+                let resultado = await actions.agregarToDo(e.target.value);
                 if (resultado) {
                   setRefresh(!refresh);
                   e.target.value = ""; //restauro el valor a vacío
@@ -106,13 +90,13 @@ const TaskList = () => {
             ))}
             <div className="border text-black-50 ms-2 me-3 p-2 ">
               {" "}
-              {tasks.length} item left
+              {store.todoList.length} item left
             </div>
           </>
         ) : (
           <>
             <div className="border ms-2 me-3 ps-5 pb-3 pt-3 d-flex justify-content-between">
-              <h1>No hay tareas</h1>
+              <h1>No hay tareas. HOLA</h1>
             </div>
           </>
         )}

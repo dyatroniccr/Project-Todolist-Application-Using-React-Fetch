@@ -5,20 +5,36 @@ import "../../styles/home.css";
 import "../../styles/todolist.css"
 
 export const Home = () => {
-	//const arrTemp = ["Pasear al perro", "Ir al cine"]
-	const[arrTemp, setArrTemp] = useState([
+	const {store, actions } = useContext(Context);
+	const [todos, setTodos] = useState([]);
+
+	useEffect(()=>{
+		const cargaDatos = async () => {
+			let {respuestaJson, response } = await actions.useFetch("/todos/user/jmontero")
+			if(response.ok){
+				setTodos(respuestaJson)
+			}			
+		}
+		cargaDatos()
+	},[])
+
+    useEffect(()=>{},[todos])
+
+	//useEffect(()=>{},[store.usuario])
+
+	const[arrTask, setArrTask] = useState([
 		{ tarea: "Pasear al perro", done: false},
 		{ tarea: "Ir al cine", done:false }
 		])
     
 	const eliminarTarea = (indice) =>{
-		setArrTemp(
-			arrTemp.filter((item, index) => {
+		setArrTask(
+			arrTask.filter((item, index) => {
 				return index != indice
 		}))
 	}
 
-	useEffect(()=>{console.log("Se reenderizo el componente Home")},[arrTemp])
+	
 	
 	return (
 		<div className="container justify-content-cenert align-item-center">
@@ -28,16 +44,16 @@ export const Home = () => {
 					onKeyDown={(e)=>{
 						if(e.keyCode == "13"){
 							console.log("Presionaste el Enter: ", e.target.value)
-							setArrTemp([...arrTemp, {tarea: e.target.value, done:false}])
+							setArrTask([...arrTask, {tarea: e.target.value, done:false}])
 						}
 					}}
 			    />
 			</div>
 			<div className="row">
-				{arrTemp && arrTemp.length > 0 ?
-				    <>{arrTemp.map((item, index)=> { //Funcion callback
+				{todos && todos.length > 0 ?
+				    <>{todos.map((item, index)=> { //Funcion callback
 					return <li key={index} className="d-flex justify-content-between">
-						{item.tarea} -- {item.done ? "Realizada" : "Por Hacer"}
+						{item.label} -- {item.done ? "Realizada" : "Por Hacer"}
 						<button 
 						   className="ocultar" 
 						   type="button"
@@ -51,7 +67,7 @@ export const Home = () => {
 					})}
 					</>
 				:
-				<><h1>No hay tareas</h1></>
+				<><h1>Hola No hay tareas</h1></>
 				}
 				Tareas
 			</div>
