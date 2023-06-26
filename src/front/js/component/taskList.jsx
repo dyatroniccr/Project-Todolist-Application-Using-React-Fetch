@@ -9,8 +9,8 @@ import "../../styles/todolist.css";
 const TaskList = () => {
   const inputName = useRef(null);
   const { store, actions } = useContext(Context);
-  const [refresh, setRefresh] = useState(false); //estado del compoenente para controlar su reenderizado
-
+  const [todos, setTodos] = useState([]);
+  
   useEffect(() => {
     //ejecutamos una función asíncrona que traerá la información de la lista de To Do
     const cargaDatos = async () => {
@@ -20,7 +20,7 @@ const TaskList = () => {
 
     let limpiar = document.querySelector("#tarea");
     //limpiar.value = "";
-  }, [store.user, refresh]); //El componente se renderizará la primera vez y cada vez que el estado user o refresh cambien
+  }, [store.user, todos]); //El componente se renderizará la primera vez y cada vez que el estado user o refresh cambien
 
   useEffect(() => {}, [store.todoList]);
 
@@ -28,14 +28,10 @@ const TaskList = () => {
     inputName.current.focus();
   }, []);
 
-  const addNewTask = (newTaskName) => {
-    setTasks([...tasks, { id: tasks.length, tarea: newTaskName, done: false }]);
-  };
-
   //Funcion para eliminar un elemento
   const removeTask = (id) => {
-    setTasks(
-      tasks.filter((item, index) => {
+    setTodos(
+      todos.filter((item, index) => {
         return index != id;
       })
     );
@@ -57,7 +53,7 @@ const TaskList = () => {
                 //addNewTask(e.target.value);
                 let resultado = await actions.agregarToDo(e.target.value);
                 if (resultado) {
-                  setRefresh(!refresh);
+                  setTodos(!todos);
                   e.target.value = ""; //restauro el valor a vacío
                 }
               }
@@ -70,7 +66,7 @@ const TaskList = () => {
             {store.todoList.map((item, index) => (
               <>
                 <div
-                  key={item.id}
+                  key={index}
                   className="tarea border fs-3 ms-2 me-3 ps-5 pb-3 pt-3 d-flex justify-content-between"
                 >
                   {item.label}
@@ -96,7 +92,7 @@ const TaskList = () => {
         ) : (
           <>
             <div className="border ms-2 me-3 ps-5 pb-3 pt-3 d-flex justify-content-between">
-              <h1>No hay tareas. HOLA</h1>
+              <h1>No hay tareas.</h1>
             </div>
           </>
         )}
